@@ -1,0 +1,61 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: csye7374
+  labels:
+    app: csye7374
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: csye7374
+  template:
+    metadata:
+      labels:
+        app: csye7374
+    spec:
+      containers:
+        - image: AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/csye7374:latest
+          name: csye7374
+          ports:
+          - name: live-port
+            containerPort: 8080
+            hostPort: 8080
+          env:
+          - name: ENDPOINTURL_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: aws-config-map
+                key: amazonProperties.endpointUrl
+          - name: BUCKETNAME_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: aws-config-map
+                key: amazonProperties.bucketName
+          - name: USERNAMEKEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-db-secret
+                key: username
+          - name: PASSWORDKEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-db-secret
+                key: password
+          - name: DBURLKEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-db-secret
+                key: dburl
+          - name: ACCESSKEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-db-secret
+                key: accessKey
+          - name: SECRETKEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-db-secret
+                key: secretKey

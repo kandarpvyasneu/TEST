@@ -1,0 +1,11 @@
+# Main yaml file for k8s-teardown-kops-utility
+
+
+- hosts: localhost
+  connection: local
+  become: yes
+  become_user: root
+  roles:
+  - kops/teardown
+
+
